@@ -1,0 +1,5 @@
+app/models/fine_tuned_multilingual_model/model.safetensors
+serviceAccountKey.json
+__pycache__
+venv
+*.pyc

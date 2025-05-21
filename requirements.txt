@@ -1,0 +1,11 @@
+flask
+flask-cors
+pandas
+numpy
+faiss-cpu
+torch
+sentence-transformers
+transformers
+python-dotenv
+huggingface-hub
+firebase-admin
