@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  AWS_REGION: ap-south-1            # pick your region
+  AWS_REGION: us-east-1            
   ECR_REPOSITORY: sinhala-farming-backend
   IMAGE_TAG: ${{ github.sha }}
 
