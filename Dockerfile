@@ -14,7 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # project code
 COPY app app
-COPY serviceAccountKey.json .
 
 # serve through gunicorn (flask built-in server is not prod-ready)
 ENV FLASK_APP=app

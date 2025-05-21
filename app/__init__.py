@@ -8,7 +8,8 @@ def create_app():
     CORS(app)
 
     # Firebase setup
-    cred = credentials.Certificate("serviceAccountKey.json")
+    cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "serviceAccountKey.json")
+    cred = credentials.Certificate(cred_path)
     firebase_admin.initialize_app(cred)
     app.db = firestore.client()
 
