@@ -18,4 +18,5 @@ COPY app app
 # serve through gunicorn (flask built-in server is not prod-ready)
 ENV FLASK_APP=app
 EXPOSE 5000
-CMD gunicorn -b 0.0.0.0:5000 app:create_app()
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:create_app()"]
+
