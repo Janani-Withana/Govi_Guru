@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  AWS_REGION: ap-south-1            # pick your region
+  AWS_REGION: us-east-1            
   ECR_REPOSITORY: sinhala-farming-backend
   IMAGE_TAG: ${{ github.sha }}
 
@@ -44,10 +44,19 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.$AWS_REGION.amazonaws.com
-            docker pull ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+            export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            export AWS_DEFAULT_REGION=${{ env.AWS_REGION }}
+
+            REGION=${{ env.AWS_REGION }}
+            ACCOUNT=${{ secrets.AWS_ACCOUNT }}
+            REPO=${{ env.ECR_REPOSITORY }}
+            TAG=${{ env.IMAGE_TAG }}
+            
+            aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$REGION.amazonaws.com
+            docker pull $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO:$TAG
             docker stop govi || true && docker rm govi || true
             docker run -d --name govi -p 80:5000 \
               -e GOOGLE_APPLICATION_CREDENTIALS=/serviceAccountKey.json \
               -v /home/ec2-user/serviceAccountKey.json:/serviceAccountKey.json:ro \
-              ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+              $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO:$TAG
